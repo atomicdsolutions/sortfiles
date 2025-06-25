@@ -11,9 +11,21 @@ A Python application for automatically organizing and sorting files by type with
 - **Flexible Configuration**: Support for various file types and custom organization rules
 - **Recursive Processing**: Option to process files in subdirectories
 - **Dry Run Mode**: Test mode to preview changes without actually moving files
-- **Source Cleanup**: Option to delete source files after successful transfer
+- **Source Cleanup**: Option to delete source files after successful transfer and clean up empty directories
 
 ## Installation
+
+### Option 1: Install from PyPI (Recommended)
+
+The easiest way to install SortFiles is using pip:
+
+```bash
+pip install sortfiles
+```
+
+After installation, the `sortfiles` command will be available in your terminal.
+
+### Option 2: Install from Source
 
 1. Clone the repository:
 ```bash
@@ -23,8 +35,14 @@ cd sortfiles
 
 2. Install the package:
 ```bash
+# For development (editable install)
 pip install -e .
+
+# For regular installation
+pip install .
 ```
+
+After installation using either method, the `sortfiles` command will be available system-wide.
 
 ## Usage
 
@@ -32,141 +50,89 @@ pip install -e .
 
 Basic usage:
 ```bash
-python sortfiles.py [source_directory] [destination_directory] [options]
+sortfiles /path/to/source /path/to/destination
 ```
 
 Options:
-- `--web`: Launch with web interface
-- `--port PORT`: Specify web interface port (default: 8080)
-- `--delete-source`: Delete source files after successful transfer
-- `--test`: Run in test mode (no actual file operations)
-- `--file-type TYPE`: Filter by file type (image, video, audio)
-- `--recursive`: Process subdirectories
+```bash
+# Start with web interface
+sortfiles --web /source/path /dest/path
+
+# Specify custom port for web interface
+sortfiles --web --port 8080 /source/path /dest/path
+
+# Delete source files after successful transfer
+sortfiles --delete-source /source/path /dest/path
+
+# Run in test mode (no actual file operations)
+sortfiles --test /source/path /dest/path
+
+# Filter by file type
+sortfiles --type image /source/path /dest/path
+
+# Process subdirectories
+sortfiles --recursive /source/path /dest/path
+
+# Directory cleanup options
+sortfiles --no-cleanup /source/path /dest/path          # Disable empty directory cleanup
+sortfiles --no-recursive-cleanup /source/path /dest/path # Disable recursive cleanup
+```
+
+For full command options:
+```bash
+sortfiles --help
+```
 
 ### Web Interface
 
 1. Start the application with the web interface:
 ```bash
-python sortfiles.py /path/to/source /path/to/destination --web
+sortfiles --web /path/to/source /path/to/destination
 ```
 
 2. Open your browser to `http://localhost:8080` (a browser window should open automatically)
 
 3. Monitor and manage file operations through the web interface
 
-## Improvement Roadmap
+## Development
 
-### Phase 1: Core Functionality Enhancements
+### Setting up Development Environment
 
-1. **Empty Folder Cleanup**
-   - Implement automatic cleanup of empty source folders after file transfers
-   - Add configuration option to control cleanup behavior
-   - Include cleanup status in progress monitoring
-
-2. **Smart Duplicate Handling**
-   - Enhance duplicate detection with more sophisticated algorithms
-   - Add options for handling duplicate files (rename, skip, overwrite)
-   - Provide duplicate file reports
-
-3. **Extended File Type Support**
-   - Add support for more file types and categories
-   - Implement custom file type rules
-   - Add file type detection based on content
-
-### Phase 2: User Experience Improvements
-
-4. **Enhanced Web Interface**
-   - Add drag-and-drop file upload
-   - Implement dark mode
-   - Add file preview capabilities
-   - Improve progress visualization
-
-5. **Configuration Management**
-   - Add GUI for configuration settings
-   - Support for saving and loading configurations
-   - Profile-based configurations
-
-### Phase 3: Advanced Features
-
-6. **File Organization Rules**
-   - Custom organization rules using patterns
-   - Support for complex file naming conventions
-   - Automated file renaming based on metadata
-
-7. **Metadata Processing**
-   - Extract and use file metadata for organization
-   - Support for custom metadata tags
-   - Advanced search and filter capabilities
-
-8. **Integration Features**
-   - Cloud storage integration
-   - Scheduled organization tasks
-   - API for external tool integration
-
-### Phase 4: Performance & Reliability
-
-9. **Performance Optimizations**
-   - Parallel processing improvements
-   - Memory usage optimization
-   - Handling of large file collections
-
-10. **Backup & Recovery**
-    - Automatic backup of file operations
-    - Operation rollback capabilities
-    - Recovery from interrupted operations
-
-## Code Organization
-
-The project follows a modular structure:
-
-```
-sortfiles/
-├── sortfiles/
-│   ├── core/
-│   │   ├── date_utils.py
-│   │   ├── file_operations.py
-│   │   └── path_utils.py
-│   ├── web/
-│   │   ├── app.py
-│   │   ├── socket_handlers.py
-│   │   └── operations_utils.py
-│   ├── utils/
-│   │   ├── hash_utils.py
-│   │   └── progress_monitor.py
-│   ├── models/
-│   │   ├── operations.py
-│   │   ├── progress.py
-│   │   └── state.py
-│   └── config.py
-├── tests/
-│   ├── core/
-│   ├── web/
-│   ├── utils/
-│   └── models/
-└── setup.py
+1. Clone the repository:
+```bash
+git clone https://github.com/atomicdsolutions/sortfiles.git
+cd sortfiles
 ```
 
-## Development Guidelines
+2. Create a virtual environment (optional but recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-1. **Code Style**
-   - Follow PEP 8 guidelines
-   - Use type hints for function parameters and returns
-   - Include docstrings for all modules, classes, and functions
+3. Install in development mode:
+```bash
+pip install -e .
+```
 
-2. **Testing**
-   - Write unit tests for all new features
-   - Use pytest for testing
-   - Maintain test coverage above 80%
+### Running Tests
 
-3. **Version Control**
-   - Create feature branches for new development
-   - Write descriptive commit messages
-   - Keep pull requests focused and manageable
+```bash
+pytest
+```
 
-4. **Documentation**
-   - Keep README and docstrings up to date
-   - Document configuration options
-   - Include examples for new features
+### Code Style
+
+The project follows PEP 8 guidelines. To format your code:
+
+```bash
+black .
+```
+
+To run type checks:
+```bash
+mypy .
+```
 
 ## Contributing
 
@@ -176,6 +142,38 @@ sortfiles/
 4. Push to the branch: `git push origin feature/my-new-feature`
 5. Submit a pull request
 
+## Docker Support
+
+Coming soon!
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Troubleshooting
+
+### Common Issues
+
+1. Command not found after installation:
+   - Make sure your Python scripts directory is in your PATH
+   - Try running `pip install --user sortfiles` if installing globally
+   - In a virtual environment, ensure it's activated
+
+2. Permission issues:
+   - Use `sudo pip install sortfiles` for system-wide installation
+   - Or install for current user with `pip install --user sortfiles`
+
+3. Web interface not opening:
+   - Check if port 8080 is available
+   - Use `--port` option to specify a different port
+   - Ensure no firewall is blocking the connection
+
+### Getting Help
+
+- Check the [GitHub Issues](https://github.com/atomicdsolutions/sortfiles/issues) for known problems
+- Create a new issue if you find a bug
+- Join our community for support (coming soon)
+
+## Project Status
+
+The project is actively maintained and in stable release. Check the [GitHub repository](https://github.com/atomicdsolutions/sortfiles) for the latest updates and releases.
